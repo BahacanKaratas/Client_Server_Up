@@ -1,0 +1,53 @@
+#Önce bir soket bağlantısı kurmak için bu şekilde başladım
+import socket
+
+#Aşağıdaki şekilde server soketi oluşturdum ve bu TCP bağlantısı kurmamı sağladı.
+#! SOKET İLE TCP BAĞLANTISI KURUP BASİT BİR HTTP SUNUCUSU KURARKEN (a şıkkı) HERHANGİ BİR HAZIR KÜTÜPHANE KULLANILMADI !
+s= socket.socket(
+    socket.AF_INET,
+    socket.SOCK_STREAM,
+    proto=0
+)
+print("Socket Created")
+
+s.bind(('localhost',9999))
+
+
+print("Waiting for connections...")
+print("")
+
+s.listen(10)
+
+allData=[]
+howMany=0
+
+#Server ve client arası TCP Socket bağlantısı
+
+while howMany<1:
+
+    client,adress=s.accept();
+    print("connected to the adress:", adress)
+    print("")
+
+
+    data = client.recv(1024).decode()
+
+    allData.append(data)
+    howMany+=1
+    client.send(bytes("Data is recieved.","utf-8"))
+    client.send(bytes("Server's need for remaining client connection for display is:","utf-8"))
+    remain=(""+str(1-howMany))
+    client.send(bytes(remain,"utf-8"))
+    count=1
+
+
+    # Sadece 1 bağlantı sonrası gelen veriyi daha anlaşılır ve güzel bir şekilde sunacak RESTful web servisi (c şıkkı)
+for i in range (len(allData)):
+    print("Cats Are Awesome Fact :")
+    count+=1
+    print(allData[i])
+    print("")
+
+
+
+client.close()
